@@ -48,6 +48,26 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button cancel = findViewById(R.id.cancel);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                notificationManager.cancel(1);
+            }
+        });
+
+        Button update = findViewById(R.id.update);
+        update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                builder = new NotificationCompat.Builder(MainActivity.this, "Text Channel")
+                        .setSmallIcon(R.drawable.ic_launcher_foreground)
+                        .setContentTitle("My notification UDATED")
+                        .setContentText("Ceci est le corps de ma notification qui a été mise à jour");
+                notificationManager.notify(1, builder.build());
+            }
+        });
 
     }
 
