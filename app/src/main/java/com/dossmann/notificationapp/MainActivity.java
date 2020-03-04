@@ -3,6 +3,8 @@ package com.dossmann.notificationapp;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -22,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     private NotificationManager notificationManager;
     private NotificationCompat.Builder builder;
+    private PendingIntent myIntent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,12 +32,18 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        myIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
         NotificationChannel channel = new NotificationChannel("Text Channel", "TextChannel", NotificationManager.IMPORTANCE_DEFAULT);
         builder = new NotificationCompat.Builder(this, "Text Channel")
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle("My notification")
-                .setContentText("Ceci est le corps de ma notification");
-        //notificationManager = NotificationManagerCompat.from(MainActivity.this);
+                .setContentText("Ceci est le corps de ma notification")
+                .setAutoCancel(true)
+                .setContentIntent(myIntent);
+
         notificationManager = getSystemService(NotificationManager.class);
         notificationManager.createNotificationChannel(channel);
 
@@ -64,7 +73,9 @@ public class MainActivity extends AppCompatActivity {
                 builder = new NotificationCompat.Builder(MainActivity.this, "Text Channel")
                         .setSmallIcon(R.drawable.ic_launcher_foreground)
                         .setContentTitle("My notification UDATED")
-                        .setContentText("Ceci est le corps de ma notification qui a été mise à jour");
+                        .setContentText("Ceci est le corps de ma notification qui a été mise à jour")
+                        .setAutoCancel(true)
+                        .setContentIntent(myIntent);
                 notificationManager.notify(1, builder.build());
             }
         });
